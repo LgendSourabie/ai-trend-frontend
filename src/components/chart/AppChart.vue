@@ -1,6 +1,8 @@
 <template>
   <section class="chart-section">
-    <h1 class="section-title">Radar Chart for Megatrend {{ chosenMegatrend }}</h1>
+    <h1 class="section-title">
+      Radar Chart for the Megatrend <span>"{{ chosenMegatrend }}"</span>
+    </h1>
     <div class="chart" ref="chartContainer" :style="{ width: width, height: height }"></div>
   </section>
 </template>
@@ -16,11 +18,11 @@ export default {
     },
     width: {
       type: String,
-      default: '900px',
+      default: '720px',
     },
     height: {
       type: String,
-      default: '600px',
+      default: '480px',
     },
     chosenMegatrend: {
       type: String,
@@ -50,8 +52,15 @@ export default {
     initChart() {
       if (this.chartContainer) {
         this.newChart = echarts.init(this.chartContainer);
+
         this.newChart.setOption(this.option);
       }
+      this.newChart.on('legendselectchanged', () => {
+        this.newChart.setOption(this.option, {
+          notMerge: false,
+          replaceMerge: ['graphic', 'series', 'radar'],
+        });
+      });
     },
     /**
      * Resize the chart to align with the window size

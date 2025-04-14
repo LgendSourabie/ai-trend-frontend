@@ -1,6 +1,7 @@
 export default {
   graphics: [
     {
+      id: 'trl-description',
       type: 'text',
       left: 'center',
       bottom: 0,
@@ -11,6 +12,7 @@ export default {
       },
     },
     {
+      id: 'trl-pilot',
       type: 'text',
       left: 'right',
       top: '0',
@@ -21,6 +23,7 @@ export default {
       },
     },
     {
+      id: 'trl-development',
       type: 'text',
       left: 'right',
       top: '5%',
@@ -31,6 +34,7 @@ export default {
       },
     },
     {
+      id: 'trl-deploy',
       type: 'text',
       left: 'right',
       top: '10%',
@@ -53,14 +57,14 @@ export default {
     'rgba(0, 119, 255, 0.3)',
     'rgba(0, 119, 255, 1)',
   ],
-  chartOptions(chartData, indicators) {
+  chartOptions(chartData, graphics, indicators, chartShape) {
     return {
       legend: {
         data: ['Macrotrends'],
       },
-      graphic: this.graphics,
+      graphic: graphics,
       radar: {
-        shape: 'circle',
+        shape: chartShape,
         splitNumber: 9,
         radius: '75%',
         indicator: indicators,

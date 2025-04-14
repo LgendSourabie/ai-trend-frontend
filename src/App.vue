@@ -1,7 +1,7 @@
 <template>
-  <AppHeader @selected-megatrend="handleSelection" :megatrends="megatrends" />
+  <AppHeader @selected-megatrend="handleSelection" @selected-shape="handleShapeSelection" :megatrends="megatrends.sort()" />
   <h3 v-if="isLoading && !error">Loading ...</h3>
-  <h3 v-if="!isLoading && megatrends.length === 0">No chart to display for now, please try later!</h3>
+  <h3 v-if="!isLoading && !error && megatrends.length === 0">No chart to display for now, please try later!</h3>
   <AppChart v-if="!isLoading && !error && indicators.length > 0 && chartData.length > 0" :option="chartOptions" :chosenMegatrend="enteredMegatrend" />
   <h3 v-if="error">{{ error }}</h3>
 </template>
@@ -25,6 +25,7 @@ export default {
       indicators: [],
       chartData: [],
       enteredMegatrend: 'AI',
+      enteredShape: 'circle',
       meanTechnologyReadinessLevel: {
         development: 2,
         pilot: 5,
@@ -39,7 +40,7 @@ export default {
      * Chart options and configurations
      */
     chartOptions() {
-      return cfg.chartOptions(this.chartData, this.indicators);
+      return cfg.chartOptions(this.chartData, cfg.graphics, this.indicators, this.enteredShape);
     },
   },
   mounted() {
@@ -48,6 +49,11 @@ export default {
   methods: {
     handleSelection(value) {
       this.enteredMegatrend = value;
+      this.fetchTrend(this.enteredMegatrend);
+    },
+
+    handleShapeSelection(value) {
+      this.enteredShape = value;
       this.fetchTrend(this.enteredMegatrend);
     },
 
@@ -75,7 +81,7 @@ export default {
         .catch((error) => {
           this.isLoading = false;
           this.error = 'Op! An error happened during the data loading, please try later.';
-          console.log(error);
+          console.warn(error);
         });
     },
   },
